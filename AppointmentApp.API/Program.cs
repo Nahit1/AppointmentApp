@@ -13,8 +13,14 @@ builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
 // Db
-builder.Services.AddDbContext<AppDbContext>(opt =>
-    opt.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+var cs =
+    builder.Configuration.GetConnectionString("DefaultConnection")
+    ?? builder.Configuration.GetConnectionString("Default")
+    ?? builder.Configuration["ConnectionStrings:DefaultConnection"]
+    ?? builder.Configuration["ConnectionStrings:Default"]
+    ?? throw new InvalidOperationException("Connection string not found");
+
+builder.Services.AddDbContext<AppDbContext>(o => o.UseNpgsql(cs));
 
 // Services
 builder.Services.AddScoped<IAuthService, AuthService>();
