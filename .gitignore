@@ -11,4 +11,7 @@ Dockerfile*
 *.dockerfile
 compose.yaml
 docker-compose.yaml
+docker-compose.override.yamlDockerfile
+compose.yaml
+docker-compose.yaml
 docker-compose.override.yaml
