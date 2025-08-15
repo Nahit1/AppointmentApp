@@ -38,7 +38,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
+builder.Services.AddCors(o => o.AddDefaultPolicy(p => p
+    .AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
+
 var app = builder.Build();
+app.UseCors();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate(); // otomatik migrate
+}
 
 app.UseSwagger(); app.UseSwaggerUI();
 app.UseAuthentication();
